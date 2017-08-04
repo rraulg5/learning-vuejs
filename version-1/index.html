@@ -19,8 +19,16 @@
       </template>
       <p v-else>Por favor escribe tu nombre:</p>
       
+      <label for="name">Nombre</label>
+      <input type="text" v-model="name" name="name" class="form-control">
 
-      <input type="text" v-model="name" class="form-control">
+      <div class="form-group">
+        <label>Selecciona tu genero</label>
+        <select v-model="gender" class="form-control">
+          <option value="m">Masculino</option>
+          <option value="f">Femenino</option>
+        </select>
+      </div>
 
       <p v-if="name == ''" class="alert alert-danger">
         Este campo es obligatorio
