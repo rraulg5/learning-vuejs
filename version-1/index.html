@@ -36,8 +36,8 @@
         <p>¿Cuantos años de experiencia tienes con PHP?</p>
         <p>
           Respuesta: {{ years_php }}
-          <button type="button" class="btn btn-success" v-on:click="years_php ++">+</button>
-          <button type="button" class="btn btn-danger" v-on:click="years_php --">-</button>
+          <button type="button" class="btn btn-success" v-on:click="addYears()">+</button>
+          <button type="button" class="btn btn-danger" v-on:click="subYears()" :disabled="years_php == 0">-</button>
         </p>
         
         <hr>
@@ -73,6 +73,14 @@
               console.log('OK');
               if (logout) {
                 console.log('Saliendo del sistema...')
+              }
+            },
+            addYears: function () {
+              this.years_php ++;
+            },
+            subYears: function () {
+              if (this.years_php > 0) {
+                this.years_php --;
               }
             }
           }
