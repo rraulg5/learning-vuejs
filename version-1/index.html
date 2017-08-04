@@ -39,6 +39,13 @@
           <button type="button" v-bind:style="{'font-size': calculateFontSize()}" v-bind:class="{'btn': true, 'btn-success': years_php < 10, 'btn-danger': years_php >= 10}" v-on:click="addYears()">+</button>
           <button type="button" class="btn btn-danger" v-on:click="subYears()" v-bind:disabled="years_php == 0">-</button>
         </p>
+
+        <p>¿Cuantos años de experiencia tienes con JS?</p>
+        <p>
+          Respuesta: {{ years_js }}
+          <button type="button" v-bind:class="{'btn': true, 'btn-success': years_js < 10, 'btn-danger': years_js >= 10}" v-on:click="addYearsJS()">+</button>
+          <button type="button" class="btn btn-danger" v-on:click="subYearsJS()" v-bind:disabled="years_js == 0">-</button>
+        </p>
         
         <hr>
         <p v-show="name">
@@ -66,7 +73,8 @@
           data: {
             name: '',
             gender: 'm',
-            years_php: 0
+            years_php: 0,
+            years_js: 0,
           },
           methods: {
             singUp: function (logout) {
@@ -81,6 +89,14 @@
             subYears: function () {
               if (this.years_php > 0) {
                 this.years_php --;
+              }
+            },
+            addYearsJS: function () {
+              this.years_js ++;
+            },
+            subYearsJS: function () {
+              if (this.years_js > 0) {
+                this.years_js --;
               }
             },
             calculateFontSize: function () {
