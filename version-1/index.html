@@ -12,34 +12,52 @@
     </head>
     <body>
 
-      <template v-if="name">
-        <h1>{{ gender == 'm' ? 'Bienvenido' : 'Bienvenida' }}, {{ name }}</h1>
-        <p>Espero que disfrutes tu visita</p>
-        <p>Tu nombre al reves es: {{ name.split('').reverse().join('') }}</p>
-      </template>
-      <p v-else>Por favor escribe tu nombre:</p>
-      
-      <label for="name">Nombre</label>
-      <input type="text" v-model="name" name="name" class="form-control">
+      <div class="col-md-8 col-md-offset-2">
 
-      <div class="form-group">
-        <label>Selecciona tu genero</label>
-        <select v-model="gender" class="form-control">
-          <option value="m">Masculino</option>
-          <option value="f">Femenino</option>
-        </select>
+        <template v-if="name">
+          <h1>{{ gender == 'm' ? 'Bienvenido' : 'Bienvenida' }}, {{ name }}</h1>
+          <p>Espero que disfrutes tu visita</p>
+          <p>Tu nombre al reves es: {{ name.split('').reverse().join('') }}</p>
+        </template>
+        <p v-else>Por favor escribe tu nombre:</p>
+        
+        <form v-on:submit.prevent="singUp(false)">
+        <label for="name">Nombre</label>
+        <input type="text" v-model="name" name="name" class="form-control">
+
+        <div class="form-group">
+          <label>Selecciona tu genero</label>
+          <select v-model="gender" class="form-control">
+            <option value="m">Masculino</option>
+            <option value="f">Femenino</option>
+          </select>
+        </div>
+
+        <p>¿Cuantos años de experiencia tienes con PHP?</p>
+        <p>
+          Respuesta: {{ years_php }}
+          <button type="button" class="btn btn-success" v-on:click="years_php ++">+</button>
+          <button type="button" class="btn btn-danger" v-on:click="years_php --">-</button>
+        </p>
+        
+        <hr>
+        <p v-show="name">
+          <button type="submit" class="btn btn-primary">Registrate</button>
+          <button type="button" v-on:click.prevent="singUp(true)" class="btn btn-primary">Registrate y sal del sistema</button>
+        </p>
+        
+        <hr>
+
+        </form>
+
+        <p v-if="name == ''" class="alert alert-danger">
+          Este campo es obligatorio
+        </p>
+
+        <pre class="well">
+          {{ $data | json }}
+        </pre>
       </div>
-
-      <p v-if="name == ''" class="alert alert-danger">
-        Este campo es obligatorio
-      </p>
-      <p v-if="name.length < 2" class="alert alert-danger">
-        El nombre no es valido
-      </p>
-
-      <pre class="well">
-        {{ $data | json }}
-      </pre>
 
       <script src="js/vue.js"></script>
       <script>
@@ -47,7 +65,16 @@
           el: 'body',
           data: {
             name: '',
-            gender: 'm'
+            gender: 'm',
+            years_php: 0
+          },
+          methods: {
+            singUp: function (logout) {
+              console.log('OK');
+              if (logout) {
+                console.log('Saliendo del sistema...')
+              }
+            }
           }
         });
       </script>
