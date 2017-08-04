@@ -15,7 +15,8 @@
       <div class="col-md-8 col-md-offset-2">
 
         <template v-if="name">
-          <h1>{{ gender == 'm' ? 'Bienvenido' : 'Bienvenida' }}, {{ name }}</h1>
+          <welcome-msg :name="name" :gender="gender"></welcome-msg>
+          
           <p>Espero que disfrutes tu visita</p>
           <p>Tu nombre al reves es: {{ name.split('').reverse().join('') }}</p>
         </template>
@@ -33,19 +34,8 @@
           </select>
         </div>
 
-        <p>¿Cuantos años de experiencia tienes con PHP?</p>
-        <p>
-          Respuesta: {{ years_php }}
-          <button type="button" v-bind:style="{'font-size': calculateFontSize()}" v-bind:class="{'btn': true, 'btn-success': years_php < 10, 'btn-danger': years_php >= 10}" v-on:click="addYears()">+</button>
-          <button type="button" class="btn btn-danger" v-on:click="subYears()" v-bind:disabled="years_php == 0">-</button>
-        </p>
-
-        <p>¿Cuantos años de experiencia tienes con JS?</p>
-        <p>
-          Respuesta: {{ years_js }}
-          <button type="button" v-bind:class="{'btn': true, 'btn-success': years_js < 10, 'btn-danger': years_js >= 10}" v-on:click="addYearsJS()">+</button>
-          <button type="button" class="btn btn-danger" v-on:click="subYearsJS()" v-bind:disabled="years_js == 0">-</button>
-        </p>
+        <years-exp :years.sync="years_php" tech="PHP"></years-exp>
+        <years-exp :years.sync="years_js" tech="JS"></years-exp>
         
         <hr>
         <p v-show="name">
@@ -66,8 +56,61 @@
         </pre>
       </div>
 
+      <script type="text/template" id="welcome_template">
+        <h1>{{ gender == 'm' ? 'Bienvenido' : 'Bienvenida' }}, {{ name }}</h1>
+      </script>
+
+      <template id="years_template">
+        <p>¿Cuantos años de experiencia tienes con {{ tech }}?</p>
+        <p>
+          Respuesta: {{ years }}
+          <button type="button"
+             class="btn btn-success"
+             @click="add()">+</button>
+
+          <button type="button" class="btn btn-danger" 
+              @click="sub()" 
+              :disabled="years == 0">-</button>
+        </p>
+      </template>
+
       <script src="js/vue.js"></script>
       <script>
+
+        Vue.component('hello-world', {
+          template: '<h2>Hello World!</h2>'
+        });
+
+        Vue.component('welcome-msg', {
+          template: '#welcome_template',
+          props: {
+            gender: {
+              type: String,
+              required: false,
+              default: 'm'
+            },
+            name: {
+              type: String,
+              required: true
+            }
+          },
+        });
+
+        Vue.component('years-exp', {
+          template: '#years_template',
+          methods: {
+            add: function () {
+              this.years ++;
+            },
+            sub: function () {
+              if (this.years > 0) {
+                this.years --;
+              }
+            },
+          },
+          props: ['years', 'tech']
+        })
+
         new Vue({
           el: 'body',
           data: {
@@ -82,25 +125,6 @@
               if (logout) {
                 console.log('Saliendo del sistema...')
               }
-            },
-            addYears: function () {
-              this.years_php ++;
-            },
-            subYears: function () {
-              if (this.years_php > 0) {
-                this.years_php --;
-              }
-            },
-            addYearsJS: function () {
-              this.years_js ++;
-            },
-            subYearsJS: function () {
-              if (this.years_js > 0) {
-                this.years_js --;
-              }
-            },
-            calculateFontSize: function () {
-              return 10 + this.years_php + 'px'
             }
           }
         });
