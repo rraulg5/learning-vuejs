@@ -11,9 +11,23 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     </head>
     <body>
-      <h1>Bienvenido, {{ name }}</h1>
+
+      <template v-if="name">
+        <h1>{{ gender == 'm' ? 'Bienvenido' : 'Bienvenida' }}, {{ name }}</h1>
+        <p>Espero que disfrutes tu visita</p>
+        <p>Tu nombre al reves es: {{ name.split('').reverse().join('') }}</p>
+      </template>
+      <p v-else>Por favor escribe tu nombre:</p>
+      
 
       <input type="text" v-model="name" class="form-control">
+
+      <p v-if="name == ''" class="alert alert-danger">
+        Este campo es obligatorio
+      </p>
+      <p v-if="name.length < 2" class="alert alert-danger">
+        El nombre no es valido
+      </p>
 
       <pre class="well">
         {{ $data | json }}
@@ -24,7 +38,8 @@
         new Vue({
           el: 'body',
           data: {
-            name: 'Raul'
+            name: '',
+            gender: 'm'
           }
         });
       </script>
