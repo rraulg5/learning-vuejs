@@ -8,41 +8,98 @@
         <title>Lesson 6</title>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+        <style>
+          .glyphicon-star:hover, .like-star{
+            color: #f0ad4e;
+            cursor: pointer;
+          }
+        </style>
     </head>
     <body>
-      <h1>Hello, Vue!</h1>
-
-      <ul>
-        <li v-for="note in notes">{{ note.text }} - by <strong>{{ note.author }}</strong></li>
-      </ul>
-
-      <form @submit.prevent="createNote">
-        <div class="form-group">
-          <input v-model="newNote.text" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">Add Note</button>
-      </form>
   
+      <div class="container">
+        <div class="col-md-12">
+          <h1>Notes, Vue!</h1>
+
+          <form @submit.prevent="createNote" class="form">
+            <div class="form-group">
+              <label>Note</label>
+              <input v-model="newNote.text" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>Author</label>
+              <input v-model="newNote.author" class="form-control">
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Add Note</button>
+            </div>
+          </form>
+
+          <p v-show="error" class="alert alert-danger">
+            Todos los campos son obligatorios
+          </p>
+
+          <hr>
+
+          <ul class="list-group" v-show="notes">
+            <li v-for="note in notes" 
+            :class="{'list-group-item': true, 'list-group-item-warning': note.like}">
+              <span :class="{'glyphicon glyphicon-star': true, 'like-star': note.like}" aria-hidden="true" @click="likeIt(note)"></span> &nbsp; 
+              <i>{{ note.text }}</i> &mdash; <strong>{{ note.author }}</strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+
       <script src="js/vue.js"></script>
       <script>
         new Vue({
           el: 'body',
           data: {
             notes: [
-              {text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.', author: 'HP'},
-              {text: 'Dolore voluptas velit quo accusantium debitis reiciendis quibusdam, pariatur iste voluptatum cupiditate.', author: 'ASUS'},
-              {text: 'Atque voluptatibus officiis totam delectus consequuntur molestiae ab doloremque fugiat.', author: 'ACER'},
-              {text: 'Quaerat labore nam vel soluta dolorum laborum illum assumenda et iste adipisci.', author: 'DELL'},
-              {text: 'Voluptatum est, quis modi vitae sit consectetur aut rerum velit!', author: 'APPLE'},
+              {
+                like: false,
+                text: 'The most beautiful thing we can experience is the mysterious. It is the source of all true art and science.',
+                author: 'Albert Einstein'
+              },
+              {
+                like: false,
+                text: 'The purpose of art is washing the dust of daily life off our souls.',
+                author: 'Pablo Picasso'
+              },
+              {
+                like: false,
+                text: 'You must not fight too often with one enemy, or you will teach him all your art of war.',
+                author: 'Napoleon Bonaparte'
+              },
+              {
+                like: false,
+                text: 'The supreme art of war is to subdue the enemy without fighting.',
+                author: 'Sun Tzu'
+              },
+              {
+                like: false,
+                text: 'Science is a way of thinking much more than it is a body of knowledge.',
+                author: 'Carl Sagan'
+              },
             ],
-            newNote: {text: '', author: ''},
+            newNote: {text: '', author: '', like: false},
+            error: false,
           },
           methods: {
             createNote: function () {
-              this.notes.push(this.newNote);
+              if (this.newNote.text == '' || this.newNote.author == '') {
+                this.error = true;
+                return;
+              }
 
-              //Reset newNote
-              this.newNote = {text: '', author: ''};
+              this.error = false;
+              this.notes.push(this.newNote);
+              this.newNote = {text: '', author: '', like: false};
+            },
+            likeIt: function (note) {
+              note.like = ! note.like;
             }
           }
         });

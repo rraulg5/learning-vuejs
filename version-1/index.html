@@ -37,6 +37,15 @@
         <template v-for="tech in techs">
           <years-exp :years.sync="tech.years" :tech="tech.name"></years-exp>
         </template>
+
+        <form class="form">
+          <div class="form-group">
+            <input v-model="newTech.name" class="form-control" placeholder="Nombre de la Tecnología">
+          </div>
+          <div class="form-group">
+            <button type="button" @click.prevent="addTech" class="btn btn-primary">Agregar Tecnología</button>
+          </div>
+        </form>
         
         <hr>
         <p v-show="name">
@@ -123,7 +132,8 @@
               {name: 'HTML', years: 0},
               {name: 'CSS', years: 0},
               {name: 'MySQL', years: 0},
-            ]
+            ],
+            newTech: {name: '', years: 0}
           },
           methods: {
             singUp: function (logout) {
@@ -131,6 +141,10 @@
               if (logout) {
                 console.log('Saliendo del sistema...')
               }
+            },
+            addTech: function () {
+              this.techs.push(this.newTech);
+              this.newTech = {name: '', years: 0};
             }
           }
         });
