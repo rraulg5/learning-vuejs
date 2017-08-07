@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Lesson 6</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    </head>
+    <body>
+      <h1>Hello, Vue!</h1>
+
+      <ul>
+        <li v-for="note in notes">{{ note.text }} - by <strong>{{ note.author }}</strong></li>
+      </ul>
+
+      <form @submit.prevent="createNote">
+        <div class="form-group">
+          <input v-model="newNote.text" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Note</button>
+      </form>
+  
+      <script src="js/vue.js"></script>
+      <script>
+        new Vue({
+          el: 'body',
+          data: {
+            notes: [
+              {text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.', author: 'HP'},
+              {text: 'Dolore voluptas velit quo accusantium debitis reiciendis quibusdam, pariatur iste voluptatum cupiditate.', author: 'ASUS'},
+              {text: 'Atque voluptatibus officiis totam delectus consequuntur molestiae ab doloremque fugiat.', author: 'ACER'},
+              {text: 'Quaerat labore nam vel soluta dolorum laborum illum assumenda et iste adipisci.', author: 'DELL'},
+              {text: 'Voluptatum est, quis modi vitae sit consectetur aut rerum velit!', author: 'APPLE'},
+            ],
+            newNote: {text: '', author: ''},
+          },
+          methods: {
+            createNote: function () {
+              this.notes.push(this.newNote);
+
+              //Reset newNote
+              this.newNote = {text: '', author: ''};
+            }
+          }
+        });
+      </script>
+    </body>
+</html>

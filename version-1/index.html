@@ -33,9 +33,10 @@
             <option value="f">Femenino</option>
           </select>
         </div>
-
-        <years-exp :years.sync="years_php" tech="PHP"></years-exp>
-        <years-exp :years.sync="years_js" tech="JS"></years-exp>
+        
+        <template v-for="tech in techs">
+          <years-exp :years.sync="tech.years" :tech="tech.name"></years-exp>
+        </template>
         
         <hr>
         <p v-show="name">
@@ -116,8 +117,13 @@
           data: {
             name: '',
             gender: 'm',
-            years_php: 0,
-            years_js: 0,
+            techs: [
+              {name: 'PHP', years: 0},
+              {name: 'JS', years: 0},
+              {name: 'HTML', years: 0},
+              {name: 'CSS', years: 0},
+              {name: 'MySQL', years: 0},
+            ]
           },
           methods: {
             singUp: function (logout) {
