@@ -8,9 +8,44 @@ function findById(items, id) {
 	return null;
 }
 
+Vue.filter('category', function (id) {
+	var category = findById(this.categories, id);
+	return category !== null ? category.name: 'No Category';
+});
+
+Vue.component('select-category', {
+	template: '#tmpl-select-category',
+	props: ['categories', 'id']
+});
+
+Vue.component('note-row', {
+	template: '#tmpl-note-row',
+	props: ['note', 'categories'],
+	data: function () {
+		return {
+			editing: false
+		};
+	},
+	methods: {
+		remove: function () {
+			this.$parent.notes.$remove(this.note);
+		},
+		edit: function () {
+			this.editing = true;
+		},
+		update: function () {
+			this.editing = false;
+		}
+	}
+});
+
 var vm = new Vue({
 	el: 'body',
 	data: {
+		new_note: {
+			text: '',
+			category_id: ''
+		},
 		notes: [
 			{
 				text: 'A business that makes nothing but money is a poor business. - Henry Ford',
@@ -49,20 +84,12 @@ var vm = new Vue({
 		]
 	},
 	methods: {
-		deleteNote: function (note) {
-			this.notes.$remove(note);
-		},
-		editNote: function (note) {
-			Vue.set(note, 'editing', true);
-		},
-		updateNote: function (note) {
-			note.editing = false;
+		create: function () {
+			this.notes.push(this.new_note);
+			this.new_note = {
+				text: '',
+				category_id: ''
+			};
 		}
 	},
-	filters: {
-		category: function (id) {
-			var category = findById(this.categories, id);
-			return category !== null ? category.name: 'No Category';
-		}
-	}
 });

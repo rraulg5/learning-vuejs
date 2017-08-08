@@ -20,28 +20,22 @@
                 <th>Note</th>
                 <th width="50">&nbsp;</th>
               </tr>
-              <tr v-for="note in notes">
-                <template v-if="! note.editing">
-                  <td>{{ note.category_id | category }}</td>
-                  <td>{{ note.text }}</td>
-                  <td>
-                    <a href="#">
-                      <span class="glyphicon glyphicon-pencil" aria-hidden="true" @click.prevent="editNote(note)"></span>
-                    </a>
-                    <a href="#">
-                      <span class="glyphicon glyphicon-trash" aria-hidden="true" @click.prevent="deleteNote(note)"></span>
-                    </a>
-                  </td>
-                </template>
-                <template v-else>
-                  <td>
-                    <select class="form-control" v-model="note.category_id">
-                      <option value="{{ category.id }}" v-for="category in categories">{{ category.name }}</option>
-                    </select>
-                  </td>
-                  <td><input type="text" class="form-control" v-model="note.text"></td>
-                  <td><a href="#"><span class="glyphicon glyphicon-ok" aria-hidden="true" @click.prevent="updateNote(note)"></span></a></td>
-                </template>
+              <tr
+                is="note-row"
+                v-for="note in notes"
+                :note.sync="note"
+                :categories="categories">
+              </tr>
+              <tr>
+                <td>
+                  <select-category :categories="categories" :id.sync="new_note.category_id"></select-category>
+                </td>
+                <td><input type="text" class="form-control" v-model="new_note.text"></td>
+                <td>
+                  <a href="#">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true" @click.prevent="create()"></span>
+                  </a>
+                </td>
               </tr>
             </table>
             <pre class="well">
@@ -50,6 +44,42 @@
         </div>
       </div>
     </div>
+
+    <!-- Templates -->
+    <template id="tmpl-select-category">
+      <select class="form-control" v-model="id">
+        <option 
+          v-for="category in categories" 
+          value="{{ category.id }}">
+          {{ category.name }}
+        </option>
+      </select>
+    </template>
+
+    <template id="tmpl-note-row">
+      <tr>
+        <template v-if="! editing">
+          <td>{{ note.category_id | category }}</td>
+          <td>{{ note.text }}</td>
+          <td>
+            <a href="#">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true" @click.prevent="edit()"></span>
+            </a>
+            <a href="#">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true" @click.prevent="remove()"></span>
+            </a>
+          </td>
+        </template>
+        <template v-else>
+          <td>
+            <select-category :categories="categories" :id.sync="note.category_id"></select-category>
+            
+          </td>
+          <td><input type="text" class="form-control" v-model="note.text"></td>
+          <td><a href="#"><span class="glyphicon glyphicon-ok" aria-hidden="true" @click.prevent="update()"></span></a></td>
+        </template>
+      </tr>
+    </template>
     
     <script src="../js/vue.js"></script>
     <script src="js/script.js"></script>
