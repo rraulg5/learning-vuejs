@@ -16,7 +16,7 @@
 
         <template v-if="name">
           <!-- <welcome-msg :name="name" :gender="gender"></welcome-msg> -->
-          <h1>{{ welcome_message }}, {{ name }}</h1>
+          <h1>{{ welcome_message }}, {{ name | ucwords }}</h1>
           
           <p>Espero que disfrutes tu visita</p>
           <p>Tu nombre al reves es: {{ reverseName }}</p>
@@ -55,20 +55,21 @@
               <button type="button" @click.prevent="addTech" class="btn btn-primary">Agregar Tecnología</button>
             </div>
           </form>
+
+          <hr>
+          
+          <h1>Tienes experiencia en:</h1>
+          <ul>
+            <li v-for="tech in techs | orderBy 'years' -1 | years">{{ tech.name }}</li>
+          </ul>
           
           <hr>
           <p v-show="name">
             <button type="submit" class="btn btn-primary">Registrate</button>
             <button type="button" v-on:click.prevent="singUp(true)" class="btn btn-primary">Registrate y sal del sistema</button>
           </p>
-          
-          <hr>
 
         </form>
-
-        <p v-if="name == ''" class="alert alert-danger">
-          Este campo es obligatorio
-        </p>
 
         <pre class="well">
           {{ $data | json }}
@@ -102,6 +103,18 @@
 
       <script src="js/vue.js"></script>
       <script>
+
+        Vue.filter('ucwords', function (value) {
+          return value.split(' ').map(function (word) {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+          }).join(' ');
+        });
+
+        Vue.filter('years', function (techs) {
+          return techs.filter(function (tech) {
+            return tech.years > 0;
+          });
+        });
 
         Vue.component('hello-world', {
           template: '<h2>Hello World!</h2>'
