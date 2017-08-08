@@ -16,7 +16,7 @@
           <h1>Lesson 9 Vue.js</h1>
             <table class="table">
               <tr>
-                <th>Category</th>
+                <th width="150">Category</th>
                 <th>Note</th>
                 <th width="50">&nbsp;</th>
               </tr>
@@ -34,12 +34,19 @@
                   </td>
                 </template>
                 <template v-else>
-                  <td><input type="text" class="form-control" v-model="note.category_id"></td>
+                  <td>
+                    <select class="form-control" v-model="note.category_id">
+                      <option value="{{ category.id }}" v-for="category in categories">{{ category.name }}</option>
+                    </select>
+                  </td>
                   <td><input type="text" class="form-control" v-model="note.text"></td>
                   <td><a href="#"><span class="glyphicon glyphicon-ok" aria-hidden="true" @click.prevent="updateNote(note)"></span></a></td>
                 </template>
               </tr>
             </table>
+            <pre class="well">
+              {{ $data | json }}
+            </pre>
         </div>
       </div>
     </div>
