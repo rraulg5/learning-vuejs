@@ -15,45 +15,54 @@
       <div class="col-md-8 col-md-offset-2">
 
         <template v-if="name">
-          <welcome-msg :name="name" :gender="gender"></welcome-msg>
+          <!-- <welcome-msg :name="name" :gender="gender"></welcome-msg> -->
+          <h1>{{ welcome_message }}, {{ name }}</h1>
           
           <p>Espero que disfrutes tu visita</p>
-          <p>Tu nombre al reves es: {{ name.split('').reverse().join('') }}</p>
+          <p>Tu nombre al reves es: {{ reverseName }}</p>
         </template>
         <p v-else>Por favor escribe tu nombre:</p>
         
         <form v-on:submit.prevent="singUp(false)">
-        <label for="name">Nombre</label>
-        <input type="text" v-model="name" name="name" class="form-control">
-
-        <div class="form-group">
-          <label>Selecciona tu genero</label>
-          <select v-model="gender" class="form-control">
-            <option value="m">Masculino</option>
-            <option value="f">Femenino</option>
-          </select>
-        </div>
-        
-        <template v-for="tech in techs">
-          <years-exp :years.sync="tech.years" :tech="tech.name"></years-exp>
-        </template>
-
-        <form class="form">
           <div class="form-group">
-            <input v-model="newTech.name" class="form-control" placeholder="Nombre de la Tecnología">
+            <label for="name">Nombre</label>
+            <input type="text" v-model="first_name" class="form-control">
           </div>
           <div class="form-group">
-            <button type="button" @click.prevent="addTech" class="btn btn-primary">Agregar Tecnología</button>
+            <label for="name">Apellido</label>
+            <input type="text" v-model="last_name" class="form-control">
+           </div>
+
+          <div class="form-group">
+            <label>Selecciona tu genero</label>
+            <select v-model="gender" class="form-control">
+              <option value="m">Masculino</option>
+              <option value="f">Femenino</option>
+            </select>
           </div>
-        </form>
-        
-        <hr>
-        <p v-show="name">
-          <button type="submit" class="btn btn-primary">Registrate</button>
-          <button type="button" v-on:click.prevent="singUp(true)" class="btn btn-primary">Registrate y sal del sistema</button>
-        </p>
-        
-        <hr>
+
+          <label>¿Hablas Español? <input type="checkbox" v-model="spanish"></label>
+          
+          <template v-for="tech in techs">
+            <years-exp :years.sync="tech.years" :tech="tech.name"></years-exp>
+          </template>
+
+          <form class="form">
+            <div class="form-group">
+              <input v-model="newTech.name" class="form-control" placeholder="Nombre de la Tecnología">
+            </div>
+            <div class="form-group">
+              <button type="button" @click.prevent="addTech" class="btn btn-primary">Agregar Tecnología</button>
+            </div>
+          </form>
+          
+          <hr>
+          <p v-show="name">
+            <button type="submit" class="btn btn-primary">Registrate</button>
+            <button type="button" v-on:click.prevent="singUp(true)" class="btn btn-primary">Registrate y sal del sistema</button>
+          </p>
+          
+          <hr>
 
         </form>
 
@@ -81,6 +90,13 @@
           <button type="button" class="btn btn-danger" 
               @click="sub()" 
               :disabled="years == 0">-</button>
+
+          <span class="{{ 'alert ' + level.alertClass }}">&nbsp;{{ level.text }}</span>
+          <div class="progress">
+            <div class="{{ 'progress-bar ' + level.progressbarClass}}" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: progressbarPercentage }">
+              <span class="sr-only">40% Complete (success)</span>
+            </div>
+          </div>
         </p>
       </template>
 
@@ -118,14 +134,43 @@
               }
             },
           },
+          computed: {
+            level: function () {
+
+              if (this.years >= 5) {
+                return {
+                  text: 'Experto',
+                  alertClass: 'alert-success',
+                  progressbarClass: 'progress-bar-success'
+                };
+              } else if (this.years > 2 && this.years < 5) {
+                return {
+                  text: 'Intermedio',
+                  alertClass: 'alert-warning',
+                  progressbarClass: 'progress-bar-warning'
+                };
+              } else {
+                return {
+                  text: 'Principiante',
+                  alertClass: 'alert-danger',
+                  progressbarClass: 'progress-bar-danger'
+                };
+              }
+            },
+            progressbarPercentage: function () {
+              return (this.years * 10) + '%';
+            }
+          },
           props: ['years', 'tech']
         })
 
         new Vue({
           el: 'body',
           data: {
-            name: '',
+            first_name: '',
+            last_name: '',
             gender: 'm',
+            spanish: true,
             techs: [
               {name: 'PHP', years: 0},
               {name: 'JS', years: 0},
@@ -134,6 +179,21 @@
               {name: 'MySQL', years: 0},
             ],
             newTech: {name: '', years: 0}
+          },
+          computed: {
+            welcome_message: function () {
+              if (this.spanish) {
+                return this.gender == 'm' ? 'Bienvenido': 'Bienvenida';
+              }
+              
+              return 'Welcome';
+            },
+            name: function () {
+              return (this.first_name + ' ' + this.last_name).trim();
+            },
+            reverseName: function () {
+              return this.name.split('').reverse().join('');
+            }
           },
           methods: {
             singUp: function (logout) {
