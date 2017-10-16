@@ -84,8 +84,8 @@
             	-->
             </ul>
 
-            <form class="new-task-form">
-                <input type="text" class="form-control">
+            <form @submit.prevent="createTask" class="new-task-form">
+                <input v-model="newTask" type="text" class="form-control">
                 <button class="btn btn-primary">Crear tarea</button>
             </form>
 
@@ -96,7 +96,19 @@
         <script>
             var vm = new Vue({
                 el: '#app',
+                methods: {
+                	createTask: function () {
+                		this.tasks.push({
+                			description: this.newTask,
+                			pending: true,
+                			editing: false
+                		});
+
+                		this.newTask = '';
+                	}
+                },
                 data: {
+                	newTask: '',
                 	tasks: [
                 		{
                 			description: 'Aprender Vue.js',
