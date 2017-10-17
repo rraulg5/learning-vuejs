@@ -16,7 +16,7 @@
             <h2>Tareas</h2>
 
             <ul class="list-group tasks">
-                <li v-for="task in tasks" class="list-group-item"
+                <li v-for="(task, index) in tasks" class="list-group-item"
                 	:class="{editing: task.editing, completed: !task.pending}">
                     <a @click="toogleStatus(task)">
                     	<span class="glyphicon" aria-hidden="true"
@@ -32,7 +32,7 @@
 	                            <span class="glyphicon glyphicon-edit"
 	                                  aria-hidden="true"></span>
 	                        </a>
-	                        <a href="#">
+	                        <a @click="deleteTask(index)">
 	                            <span class="glyphicon glyphicon-trash"
 	                                  aria-hidden="true"></span>
 	                        </a>
@@ -84,6 +84,8 @@
             	-->
             </ul>
 
+            <p><a @click="deleteCompleted" class="btn btn-primary">Eliminar tareas completadas</a></p>
+
             <form @submit.prevent="createTask" class="new-task-form">
                 <input v-model="newTask" type="text" class="form-control">
                 <button class="btn btn-primary">Crear tarea</button>
@@ -122,6 +124,14 @@
                     },
                     cancelTask: function (task) {
                         task.editing = false;
+                    },
+                    deleteTask: function (index) {
+                        this.tasks.splice(index, 1);
+                    },
+                    deleteCompleted: function () {
+                        this.tasks = this.tasks.filter(function (task_item) {
+                            return task_item.pending;
+                        });
                     },
                     toogleStatus: function (task) {
                         task.pending = !task.pending;
