@@ -18,7 +18,7 @@
             <ul class="list-group tasks">
                 <li v-for="task in tasks" class="list-group-item"
                 	:class="{editing: task.editing, completed: !task.pending}">
-                    <a href="#">
+                    <a @click="toogleStatus(task)">
                     	<span class="glyphicon" aria-hidden="true"
                     		  :class="task.pending ? 'glyphicon-unchecked' : 'glyphicon-check'">
                     	</span>
@@ -28,7 +28,7 @@
 						<span  class="description">{{ task.description }}</span>
 
 						<div>
-	                        <a href="#">
+	                        <a @click="editTask(task)">
 	                            <span class="glyphicon glyphicon-edit"
 	                                  aria-hidden="true"></span>
 	                        </a>
@@ -40,14 +40,14 @@
 					</template>
                     
                     <template v-else>
-                    	<input type="text" v-model="task.description">
+                    	<input type="text" v-model="draf">
 
                     	<div>                
-	                        <a href="#">
+	                        <a @click="updateTask(task)">
 	                            <span class="glyphicon glyphicon-ok"
 	                                  aria-hidden="true"></span>
 	                        </a>
-	                        <a href="#">
+	                        <a @click="cancelTask(task)">
 	                            <span class="glyphicon glyphicon-remove"
 	                                  aria-hidden="true"></span>
 	                        </a>
@@ -105,9 +105,30 @@
                 		});
 
                 		this.newTask = '';
-                	}
+                	},
+                    editTask: function (task) {
+                        this.tasks.forEach(function (task_item) {
+                            task_item.editing = false;
+                        });
+
+                        this.draf = task.description;
+
+                        task.editing = true;
+                    },
+                    updateTask: function (task) {
+                        task.description = this.draf;
+
+                        task.editing = false;
+                    },
+                    cancelTask: function (task) {
+                        task.editing = false;
+                    },
+                    toogleStatus: function (task) {
+                        task.pending = !task.pending;
+                    },
                 },
                 data: {
+                    draf: '',
                 	newTask: '',
                 	tasks: [
                 		{
@@ -118,7 +139,7 @@
                 		{
                 			description: 'Crear una API',
                 			pending: true,
-                			editing: true
+                			editing: false
                 		},
                 		{
                 			description: 'Crear tarea',
