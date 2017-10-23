@@ -9,6 +9,12 @@ Vue.component('app-icon', {
 });
 
 Vue.component('app-task', {
+    data: function () {
+        return {
+            editing: false,
+            draf: '',
+        };
+    },
     template: '#task_template',
     props: ['tasks', 'task', 'index'],
     methods: {
@@ -16,21 +22,24 @@ Vue.component('app-task', {
             this.task.pending = !this.task.pending;
         },
         edit: function () {
+            /*
+            FIX ME: reimplement this!
             this.tasks.forEach(function (task_item) {
                 task_item.editing = false;
             });
+            */
 
             this.draf = this.task.description;
 
-            this.task.editing = true;
+            this.editing = true;
         },
         update: function () {
             this.task.description = this.draf;
 
-            this.task.editing = false;
+            this.editing = false;
         },
         cancel: function () {
-            this.task.editing = false;
+            this.editing = false;
         },
         remove: function () {
             this.tasks.splice(this.index, 1);
@@ -58,23 +67,19 @@ var vm = new Vue({
         
     },
     data: {
-        draf: '',
     	newTask: '',
     	tasks: [
     		{
     			description: 'Aprender Vue.js',
     			pending: true,
-    			editing: false
     		},
     		{
     			description: 'Crear una API',
     			pending: true,
-    			editing: false
     		},
     		{
     			description: 'Crear tarea',
     			pending: false,
-    			editing: false
     		},
     	]
     }
