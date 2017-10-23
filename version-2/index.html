@@ -19,9 +19,7 @@
                 <li v-for="(task, index) in tasks" class="list-group-item"
                 	:class="{editing: task.editing, completed: !task.pending}">
                     <a @click="toogleStatus(task)">
-                    	<span class="glyphicon" aria-hidden="true"
-                    		  :class="task.pending ? 'glyphicon-unchecked' : 'glyphicon-check'">
-                    	</span>
+                        <app-icon :img="task.pending ? 'unchecked' : 'check'"></app-icon>
                     </a>
 					
 					<template v-if="!task.editing">
@@ -29,12 +27,10 @@
 
 						<div>
 	                        <a @click="editTask(task)">
-	                            <span class="glyphicon glyphicon-edit"
-	                                  aria-hidden="true"></span>
+                                <app-icon img="edit"></app-icon>
 	                        </a>
 	                        <a @click="deleteTask(index)">
-	                            <span class="glyphicon glyphicon-trash"
-	                                  aria-hidden="true"></span>
+                                <app-icon img="trash"></app-icon>
 	                        </a>
 	                    </div>  
 					</template>
@@ -44,44 +40,14 @@
 
                     	<div>                
 	                        <a @click="updateTask(task)">
-	                            <span class="glyphicon glyphicon-ok"
-	                                  aria-hidden="true"></span>
+                                <app-icon img="ok"></app-icon>
 	                        </a>
 	                        <a @click="cancelTask(task)">
-	                            <span class="glyphicon glyphicon-remove"
-	                                  aria-hidden="true"></span>
+                                <app-icon img="remove"></app-icon>
 	                        </a>
 	                    </div>
                     </template>                       
                 </li>
-                <!--
-                <li class="list-group-item editing">
-                    <a href="#"><span 
-                        class="glyphicon glyphicon-unchecked"
-                        aria-hidden="true"></span></a>
-
-                    <input type="text" value="Suscribirse en Styde">
-
-                    
-                </li>
-                <li class="list-group-item completed">
-                    <a href="#"><span class="glyphicon glyphicon-check"
-                                      aria-hidden="true"></span></a>
-
-                    <span class="description">Crear una API</span>
-
-                    <div>
-                        <a href="#">
-                            <span class="glyphicon glyphicon-edit"
-                                  aria-hidden="true"></span>
-                        </a>
-                        <a href="#">
-                            <span class="glyphicon glyphicon-trash"
-                                  aria-hidden="true"></span>
-                        </a>
-                    </div>   
-                </li>
-            	-->
             </ul>
 
             <p><a @click="deleteCompleted" class="btn btn-primary">Eliminar tareas completadas</a></p>
@@ -94,71 +60,6 @@
         </div>
 
         <script src="https://unpkg.com/vue@2.1.8/dist/vue.js"></script>
-
-        <script>
-            var vm = new Vue({
-                el: '#app',
-                methods: {
-                	createTask: function () {
-                		this.tasks.push({
-                			description: this.newTask,
-                			pending: true,
-                			editing: false
-                		});
-
-                		this.newTask = '';
-                	},
-                    editTask: function (task) {
-                        this.tasks.forEach(function (task_item) {
-                            task_item.editing = false;
-                        });
-
-                        this.draf = task.description;
-
-                        task.editing = true;
-                    },
-                    updateTask: function (task) {
-                        task.description = this.draf;
-
-                        task.editing = false;
-                    },
-                    cancelTask: function (task) {
-                        task.editing = false;
-                    },
-                    deleteTask: function (index) {
-                        this.tasks.splice(index, 1);
-                    },
-                    deleteCompleted: function () {
-                        this.tasks = this.tasks.filter(function (task_item) {
-                            return task_item.pending;
-                        });
-                    },
-                    toogleStatus: function (task) {
-                        task.pending = !task.pending;
-                    },
-                },
-                data: {
-                    draf: '',
-                	newTask: '',
-                	tasks: [
-                		{
-                			description: 'Aprender Vue.js',
-                			pending: true,
-                			editing: false
-                		},
-                		{
-                			description: 'Crear una API',
-                			pending: true,
-                			editing: false
-                		},
-                		{
-                			description: 'Crear tarea',
-                			pending: false,
-                			editing: false
-                		},
-                	]
-                }
-            });
-        </script>
+        <script src="app.js"></script>
   </body>
 </html>
