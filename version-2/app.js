@@ -8,6 +8,36 @@ Vue.component('app-icon', {
     }
 });
 
+Vue.component('app-task', {
+    template: '#task_template',
+    props: ['tasks', 'task', 'index'],
+    methods: {
+        toogleStatus: function () {
+            this.task.pending = !this.task.pending;
+        },
+        edit: function () {
+            this.tasks.forEach(function (task_item) {
+                task_item.editing = false;
+            });
+
+            this.draf = this.task.description;
+
+            this.task.editing = true;
+        },
+        update: function () {
+            this.task.description = this.draf;
+
+            this.task.editing = false;
+        },
+        cancel: function () {
+            this.task.editing = false;
+        },
+        remove: function () {
+            this.tasks.splice(this.index, 1);
+        },
+    }
+});
+
 var vm = new Vue({
     el: '#app',
     methods: {
@@ -20,34 +50,12 @@ var vm = new Vue({
 
     		this.newTask = '';
     	},
-        editTask: function (task) {
-            this.tasks.forEach(function (task_item) {
-                task_item.editing = false;
-            });
-
-            this.draf = task.description;
-
-            task.editing = true;
-        },
-        updateTask: function (task) {
-            task.description = this.draf;
-
-            task.editing = false;
-        },
-        cancelTask: function (task) {
-            task.editing = false;
-        },
-        deleteTask: function (index) {
-            this.tasks.splice(index, 1);
-        },
         deleteCompleted: function () {
             this.tasks = this.tasks.filter(function (task_item) {
                 return task_item.pending;
             });
         },
-        toogleStatus: function (task) {
-            task.pending = !task.pending;
-        },
+        
     },
     data: {
         draf: '',
