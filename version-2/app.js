@@ -16,7 +16,7 @@ Vue.component('app-task', {
         };
     },
     template: '#task_template',
-    props: ['tasks', 'task', 'index'],
+    props: ['task', 'index'],
     methods: {
         toogleStatus: function () {
             this.task.pending = !this.task.pending;
@@ -42,7 +42,7 @@ Vue.component('app-task', {
             this.editing = false;
         },
         remove: function () {
-            this.tasks.splice(this.index, 1);
+            this.$emit('remove', this.index);
         },
     }
 });
@@ -59,6 +59,9 @@ var vm = new Vue({
 
     		this.newTask = '';
     	},
+        deleteTask: function (index) {
+            this.tasks.splice(index, 1);
+        },
         deleteCompleted: function () {
             this.tasks = this.tasks.filter(function (task_item) {
                 return task_item.pending;

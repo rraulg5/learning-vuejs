@@ -16,7 +16,8 @@
             <h2>Tareas</h2>
 
             <ul class="list-group tasks">
-                <li is="app-task" v-for="(task, index) in tasks" :tasks="tasks" :task="task" :index="index"></li>
+                <li is="app-task" v-for="(task, index) in tasks"
+                :tasks="tasks" :task="task" :index="index" @remove="deleteTask"></li>
             </ul>
 
             <p><a @click="deleteCompleted" class="btn btn-primary">Eliminar tareas completadas</a></p>
