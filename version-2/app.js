@@ -1,3 +1,5 @@
+var EventBus = new Vue;
+
 Vue.component('app-icon', {
     template: '<span :class="cssClasses" aria-hidden="true"></span>',
     props: ['img'],
@@ -17,6 +19,13 @@ Vue.component('app-task', {
     },
     template: '#task_template',
     props: ['task', 'index'],
+    created: function () {
+        EventBus.$on('editing', function (index) {
+            if (this.index != index) {
+                this.discard();
+            }
+        }.bind(this));
+    },
     methods: {
         toogleStatus: function () {
             this.task.pending = !this.task.pending;
@@ -29,6 +38,8 @@ Vue.component('app-task', {
             });
             */
 
+            EventBus.$emit('editing', this.index);
+
             this.draf = this.task.description;
 
             this.editing = true;
@@ -36,6 +47,9 @@ Vue.component('app-task', {
         update: function () {
             this.task.description = this.draf;
 
+            this.editing = false;
+        },
+        discard: function () {
             this.editing = false;
         },
         cancel: function () {
